@@ -1,0 +1,6 @@
+PySide2
+speechrecognition
+pydub
+nltk
+fuzzywuzzy
+python-Levenshtein
