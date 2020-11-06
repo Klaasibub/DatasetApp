@@ -11,6 +11,7 @@ from PySide2 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
 from form import Ui_Mainwindow
 from utils import split_audio_by_pauses, is_path_to_txt, is_path_to_audio, speech_recognize, \
                   StringComparison, text_difference
+from settings import Settingswindow
 
 class ProcessingThread(QtCore.QThread):
     finish_signal = QtCore.Signal(object, object, object)
@@ -21,11 +22,14 @@ class ProcessingThread(QtCore.QThread):
         self.audioPath:str = None
         self.outdirPath:str = None
         self.txtPath:str = None
-        self.min_sec:int = None
-        self.max_sec:int = None
+        self.min_sec:int = 5
+        self.max_sec:int = 25
         self.min_accuracy:int = 60
-        self.max_accuracy:int = 97
-
+        self.max_accuracy:int = 100
+        self.sampling_rate:int = 22050
+        self.min_silence_len:int = 700
+        self.keep_silence:int = 300
+        self.silence_thresh:int = -55
 
     def run(self):
         filename = self.audioPath
@@ -36,7 +40,9 @@ class ProcessingThread(QtCore.QThread):
             os.mkdir(outdir)
 
         # split audio 
-        split_audio_by_pauses(filename, outdir, self.min_sec, self.max_sec)
+        split_audio_by_pauses(filename, outdir, self.min_sec, self.max_sec,
+                              min_silence_len=self.min_silence_len, silence_thresh=self.silence_thresh,
+                              keep_silence=self.keep_silence, framerate=self.sampling_rate)
 
         # speech recognize
         with open(txt, 'r', encoding='utf-8') as text_file:
@@ -99,11 +105,10 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.diffFiles = list()
 
         self.player = QtMultimedia.QMediaPlayer()
+        self.loadParams()
 
     def initUi(self):
-        validator = QtGui.QIntValidator(2, 30, self)
-        self.ui.numberLineEdit.setValidator(validator)
-        self.ui.lineEdit.setValidator(validator)
+        self.ui.paramsBt.clicked.connect(self.paramsClicked)
 
         self.ui.audioBt.clicked.connect(self.audioDialog)
         self.ui.txtBt.clicked.connect(self.txtDialog)
@@ -125,6 +130,21 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.thread = ProcessingThread(self)
         self.thread.finish_signal.connect(self.stopProcessing)
         
+    def loadParams(self):
+        if not os.path.isfile('params.json'):
+            w = Settingswindow()
+            w.defaultClicked()
+            w.saveClicked()
+            del w
+
+        with open('params.json', 'r') as params_json:
+            self.params = json.load(params_json)
+
+    def paramsClicked(self):
+        self.widget = Settingswindow()
+        self.widget.show()
+        self.loadParams()
+
     def audioDialog(self):
         fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Select audio', '.', "Audios (*.mp3 *.wav *.flac)")[0]
         if fname != '':
@@ -160,8 +180,15 @@ class Mainwindow(QtWidgets.QMainWindow):
             self.thread.audioPath = self.ui.audioLabel.text()
             self.thread.outdirPath = self.ui.outdirLabel.text()
             self.thread.txtPath = self.ui.txtLabel.text()
-            self.thread.min_sec = int(self.ui.numberLineEdit.text())
-            self.thread.max_sec = int(self.ui.lineEdit.text())
+            self.thread.min_sec = self.params['min_sample_len sec']
+            self.thread.max_sec = self.params['max_sample_len sec']
+            self.thread.min_accuracy = self.params['min_accuracy %']
+            self.thread.max_accuracy = self.params['min_correct_accuracy %']
+            self.thread.sampling_rate = self.params['sampling_rate']
+            self.thread.min_silence_len = self.params['min_silence_len ms']
+            self.thread.keep_silence = self.params['keep_silence ms']
+            self.thread.silence_thresh = self.params['silence_threshold db']
+
             self.thread.start()
     
     def stopProcessing(self, one, two, three):

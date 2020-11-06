@@ -10,10 +10,11 @@ import speech_recognition
 from pydub.silence import split_on_silence
 from pydub import AudioSegment
 
-from nltk import word_tokenize
+from nltk import word_tokenize, download
 from fuzzywuzzy import fuzz
 from difflib import Differ
 
+download('punkt')
 
 def is_path_to_audio(file: str) -> bool:
     extension = file.rsplit('.', 1)[-1]
@@ -42,12 +43,13 @@ def safe_audiosegment(audioPath: str, framerate: int = 22050) -> AudioSegment:
         return sound
     return sound.set_frame_rate(framerate)
 
-def split_audio_by_pauses(filename: str, outdir: str, min_sec: int = 3, max_sec: int = 30, 
-                          min_silence_len: int = 800, silence_thresh: int = -50, framerate: int = 22050) -> None:
+def split_audio_by_pauses(filename: str, outdir: str, min_sec: int = 3, max_sec: int = 25,
+                          min_silence_len: int = 800, silence_thresh: int = -50,
+                          keep_silence: int = 400, framerate: int = 22050) -> None:
     sound_file = safe_audiosegment(filename, framerate)
     if sound_file is None:
         return
-    audio_chunks = split_on_silence(sound_file, min_silence_len, silence_thresh, keep_silence=400)
+    audio_chunks = split_on_silence(sound_file, min_silence_len, silence_thresh, keep_silence=keep_silence)
     for i, chunk in enumerate(audio_chunks):
         if max_sec >= chunk.duration_seconds >= min_sec:
             filename = filename.rsplit('.', 1)[0]

@@ -17,7 +17,7 @@ class Ui_Mainwindow(object):
     def setupUi(self, Mainwindow):
         if not Mainwindow.objectName():
             Mainwindow.setObjectName(u"Mainwindow")
-        Mainwindow.resize(1279, 508)
+        Mainwindow.resize(1279, 480)
         self.centralwidget = QWidget(Mainwindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
@@ -105,43 +105,6 @@ class Ui_Mainwindow(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_4)
 
-        self.horizontalLayout_6 = QHBoxLayout()
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.numberLabel = QLabel(self.page)
-        self.numberLabel.setObjectName(u"numberLabel")
-        self.numberLabel.setMinimumSize(QSize(130, 0))
-
-        self.horizontalLayout_6.addWidget(self.numberLabel)
-
-        self.numberLineEdit = QLineEdit(self.page)
-        self.numberLineEdit.setObjectName(u"numberLineEdit")
-        self.numberLineEdit.setAlignment(Qt.AlignCenter)
-
-        self.horizontalLayout_6.addWidget(self.numberLineEdit)
-
-        self.label = QLabel(self.page)
-        self.label.setObjectName(u"label")
-
-        self.horizontalLayout_6.addWidget(self.label)
-
-        self.lineEdit = QLineEdit(self.page)
-        self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.setAlignment(Qt.AlignCenter)
-
-        self.horizontalLayout_6.addWidget(self.lineEdit)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_6.addItem(self.horizontalSpacer)
-
-        self.horizontalLayout_6.setStretch(0, 1)
-        self.horizontalLayout_6.setStretch(1, 1)
-        self.horizontalLayout_6.setStretch(2, 1)
-        self.horizontalLayout_6.setStretch(3, 1)
-        self.horizontalLayout_6.setStretch(4, 30)
-
-        self.verticalLayout.addLayout(self.horizontalLayout_6)
-
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.processBt = QPushButton(self.page)
@@ -161,12 +124,16 @@ class Ui_Mainwindow(object):
         self.verticalLayout.setStretch(1, 1)
         self.verticalLayout.setStretch(2, 1)
         self.verticalLayout.setStretch(3, 1)
-        self.verticalLayout.setStretch(4, 1)
 
         self.gridLayout.addLayout(self.verticalLayout, 2, 0, 1, 1)
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.paramsBt = QPushButton(self.page)
+        self.paramsBt.setObjectName(u"paramsBt")
+
+        self.horizontalLayout_5.addWidget(self.paramsBt)
+
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_5.addItem(self.horizontalSpacer_2)
@@ -401,11 +368,8 @@ class Ui_Mainwindow(object):
         self.outdirBt.setText(QCoreApplication.translate("Mainwindow", u"Outdir", None))
         self.outdirCheck.setText(QCoreApplication.translate("Mainwindow", u"Selected", None))
         self.outdirLabel.setText(QCoreApplication.translate("Mainwindow", u"the dir is not selected", None))
-        self.numberLabel.setText(QCoreApplication.translate("Mainwindow", u"Length of the sample from:", None))
-        self.numberLineEdit.setText(QCoreApplication.translate("Mainwindow", u"10", None))
-        self.label.setText(QCoreApplication.translate("Mainwindow", u"to", None))
-        self.lineEdit.setText(QCoreApplication.translate("Mainwindow", u"30", None))
         self.processBt.setText(QCoreApplication.translate("Mainwindow", u"Preprocess", None))
+        self.paramsBt.setText(QCoreApplication.translate("Mainwindow", u"Change params", None))
         self.fixDiffBt.setText(QCoreApplication.translate("Mainwindow", u"Fix diff", None))
         self.stopBt.setText(QCoreApplication.translate("Mainwindow", u"Stop", None))
         self.playBt.setText(QCoreApplication.translate("Mainwindow", u"Play", None))

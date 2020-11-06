@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1279</width>
-    <height>508</height>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout">
         <item row="2" column="0">
-         <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,1,1,1">
+         <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,1,1">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1,15">
             <item>
@@ -127,63 +127,6 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,1,1,30">
-            <item>
-             <widget class="QLabel" name="numberLabel">
-              <property name="minimumSize">
-               <size>
-                <width>130</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Length of the sample from:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="numberLineEdit">
-              <property name="text">
-               <string>10</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>to</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="lineEdit">
-              <property name="text">
-               <string>30</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
              <widget class="QPushButton" name="processBt">
@@ -204,6 +147,13 @@
         </item>
         <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QPushButton" name="paramsBt">
+            <property name="text">
+             <string>Change params</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <spacer name="horizontalSpacer_2">
             <property name="orientation">

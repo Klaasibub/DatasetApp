@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>250</width>
+    <height>402</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="defaultBt">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>368</y>
+     <width>80</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Default</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="saveBt">
+   <property name="geometry">
+    <rect>
+     <x>134</x>
+     <y>368</y>
+     <width>108</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="minAccuracyLabel">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>24</y>
+     <width>79</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>min_accuracy %</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="minAccuracyTE">
+   <property name="geometry">
+    <rect>
+     <x>134</x>
+     <y>24</y>
+     <width>108</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>60</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="minCorrectAccuracyLabel">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>67</y>
+     <width>119</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>min_correct_accuracy %</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="minCorrectAccuracyTE">
+   <property name="geometry">
+    <rect>
+     <x>134</x>
+     <y>67</y>
+     <width>108</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>97</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="minSampleLenLabel">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>110</y>
+     <width>94</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>min_sample_len sec</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="minSampleLenTE">
+   <property name="geometry">
+    <rect>
+     <x>134</x>
+     <y>110</y>
+     <width>108</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>5</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="maxSampleLenLabel">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>153</y>
+     <width>98</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>max_sample_len sec</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="maxSampleLenTE">
+   <property name="geometry">
+    <rect>
+     <x>134</x>
+     <y>153</y>
+     <width>108</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>25</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="silenceThresholdLabel">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>196</y>
+     <width>98</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>silence_threshold db</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="silenceThresholdTE">
+   <property name="geometry">
+    <rect>
+     <x>134</x>
+     <y>196</y>
+     <width>108</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>-50</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="samplingRateLabel">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>239</y>
+     <width>67</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>sampling_rate</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="samplingRateTE">
+   <property name="geometry">
+    <rect>
+     <x>134</x>
+     <y>239</y>
+     <width>108</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>22050</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="minSilenceLenLabel">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>282</y>
+     <width>90</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>min_silence_len ms</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="minSilenceLenTE">
+   <property name="geometry">
+    <rect>
+     <x>134</x>
+     <y>282</y>
+     <width>108</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>800</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="keepSilenceLabel">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>325</y>
+     <width>77</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>keep_silence ms</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="keepSilenceTE">
+   <property name="geometry">
+    <rect>
+     <x>134</x>
+     <y>325</y>
+     <width>108</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>400</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
