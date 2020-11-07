@@ -1,4 +1,4 @@
-from PySide2 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
+from PyQt5 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
 from settings_form import Ui_Dialog
 import json
 import os

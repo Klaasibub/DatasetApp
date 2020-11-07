@@ -6,15 +6,16 @@ import subprocess
 import shutil
 from tempfile import TemporaryDirectory
 from threading import Thread
+from chardet.universaldetector import UniversalDetector
 
-from PySide2 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
+from PyQt5 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
 from form import Ui_Mainwindow
 from utils import split_audio_by_pauses, is_path_to_txt, is_path_to_audio, speech_recognize, \
                   StringComparison, text_difference
 from settings import Settingswindow
 
 class ProcessingThread(QtCore.QThread):
-    finish_signal = QtCore.Signal(object, object, object)
+    finish_signal = QtCore.pyqtSignal(object, object, object)
 
     def __init__(self, parent=None):
         QtCore.QThread.__init__(self, parent)
@@ -45,7 +46,15 @@ class ProcessingThread(QtCore.QThread):
                               keep_silence=self.keep_silence, framerate=self.sampling_rate)
 
         # speech recognize
-        with open(txt, 'r', encoding='utf-8') as text_file:
+        detector = UniversalDetector()
+        with open(txt, 'rb') as fh:
+            for line in fh:
+                detector.feed(line)
+                if detector.done:
+                    break
+            detector.close()
+            
+        with open(txt, 'r', encoding=detector.result['encoding']) as text_file:
             original_text = text_file.read()
 
         sc = StringComparison(original_text)
@@ -75,8 +84,10 @@ class ProcessingThread(QtCore.QThread):
                     else:
                         if not os.path.isdir(f'{outdir}/correct'):
                             os.mkdir(f'{outdir}/correct')
-                        os.rename(f'{outdir}/{sample_name}.txt', f'{outdir}/correct/{sample_name}.txt')
-                        os.rename(f'{outdir}/{sample_name}.wav', f'{outdir}/correct/{sample_name}.wav')
+                        shutil.copy(f'{outdir}/{sample_name}.txt', f'{outdir}/correct/{sample_name}.txt')
+                        shutil.copy(f'{outdir}/{sample_name}.wav', f'{outdir}/correct/{sample_name}.wav')
+                        os.remove(f'{outdir}/{sample_name}.txt')
+                        os.remove(f'{outdir}/{sample_name}.wav')
 
         self.finish_signal.emit(True, None, None) 
 
@@ -173,6 +184,9 @@ class Mainwindow(QtWidgets.QMainWindow):
         
     def processing(self):
         if self.ui.audioCheck.isChecked() and self.ui.txtCheck.isChecked() and self.ui.outdirCheck.isChecked():
+            if not (os.path.isfile(self.ui.audioLabel.text()) and os.path.isfile(self.ui.txtLabel.text()) and os.path.isdir(self.ui.outdirLabel.text())):
+                return
+
             self.currentTime = 0
             self.statusText = "Split and recognize audio... "
             self.timerFlag = True
@@ -221,6 +235,8 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.player.setPosition(pos)
 
     def confirmClicked(self):
+        if len(self.diffFiles) == 0:
+            return
         outdir = self.ui.outdirLabel.text()
         diff_file = os.path.basename(self.diffFiles[self.diffIdx])
         with open(f'{outdir}/{diff_file}', 'w', encoding='utf-8') as f:
@@ -240,6 +256,8 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.getNextDiffClicked()
 
     def removeClicked(self):
+        if len(self.diffFiles) == 0:
+            return
         outdir = self.ui.outdirLabel.text()
         diff_file = os.path.basename(self.diffFiles[self.diffIdx])
 

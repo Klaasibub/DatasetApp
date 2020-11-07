@@ -110,7 +110,7 @@ class StringComparison:
         self.__indexes.pop(0)
 
     def __push_right(self) -> None:
-        if self.__best_pos + self.__length-1 == self.__max_idx:
+        if self.__best_pos + self.__length - 2 < self.__max_idx:
             return
         idx = self.__best_pos + self.__length
         self.__words.append(self.__origin_tokens[self.__words_idx[idx]])
@@ -171,7 +171,7 @@ class StringComparison:
         original_str = ' '.join(self.__words)
         first_word_idx = self.__indexes[0]
         last_word_idx = self.__indexes[-1] + 1
-        if last_word_idx != self.__max_idx-1 and not self.__origin_tokens[last_word_idx+1].isalpha():
+        if len(self.__origin_tokens) > last_word_idx+1 and not self.__origin_tokens[last_word_idx+1].isalpha():
             last_word_idx += 1
         output = ' '.join([part for part in self.__origin_tokens[first_word_idx:last_word_idx]])
 
