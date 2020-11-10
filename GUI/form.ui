@@ -23,9 +23,9 @@
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout">
         <item row="2" column="0">
-         <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,1,1">
+         <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,1,0,1">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1,15">
+           <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,0,15">
             <item>
              <widget class="QPushButton" name="audioBt">
               <property name="text">
@@ -59,7 +59,7 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,1,15">
+           <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,0,15">
             <item>
              <widget class="QPushButton" name="txtBt">
               <property name="text">
@@ -93,7 +93,7 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="2,1,15">
+           <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="2,0,15">
             <item>
              <widget class="QPushButton" name="outdirBt">
               <property name="text">
@@ -123,6 +123,46 @@
                <string>the dir is not selected</string>
               </property>
              </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="2,0,15">
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="asDefaultBt">
+              <property name="text">
+               <string>Save dirs as default</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </item>
@@ -334,7 +374,7 @@ color: rgb(0, 0, 0);</string>
          </layout>
         </item>
         <item row="1" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_19" stretch="1,2,2,1">
+         <layout class="QHBoxLayout" name="horizontalLayout_19" stretch="1,2,2,2,1">
           <item>
            <spacer name="horizontalSpacer_10">
             <property name="orientation">
@@ -347,6 +387,17 @@ color: rgb(0, 0, 0);</string>
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="getPrevDiffBt">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 222, 181);
+color: rgb(0, 0, 0);</string>
+            </property>
+            <property name="text">
+             <string>Get previous diff</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="refreshBt">

@@ -1,1 +1,1 @@
-{"min_sample_len sec": 4, "max_sample_len sec": 25, "sampling_rate": 22050, "silence_threshold db": -50, "min_accuracy %": 0, "min_silence_len ms": 800, "keep_silence ms": 300}
+{"min_sample_len sec": 4, "max_sample_len sec": 25, "sampling_rate": 22050, "silence_threshold db": -50, "min_accuracy %": 0, "min_silence_len ms": 800, "keep_silence ms": 300, "default_out_dir": "D:/Projects/Implementation/outdir", "default_audio_dir": "D:/Projects/Implementation/dataset", "default_txt_dir": "D:/Projects/Implementation/dataset"}

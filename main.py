@@ -116,12 +116,14 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.ui.audioBt.clicked.connect(self.audioDialog)
         self.ui.txtBt.clicked.connect(self.txtDialog)
         self.ui.outdirBt.clicked.connect(self.outdirDialog)
+        self.ui.asDefaultBt.clicked.connect(self.dirsAsDefaultClicked)
         self.ui.processBt.clicked.connect(self.processBtClicked)
 
         self.ui.fixDiffBt.clicked.connect(self.onFixDiffClicked)
         self.ui.backBt.clicked.connect(self.backClicked)
 
         self.ui.refreshBt.clicked.connect(self.refreshDiffs)
+        self.ui.getPrevDiffBt.clicked.connect(self.getPrevDiffClicked)
         self.ui.getNextDiffBt.clicked.connect(self.getNextDiffClicked)
         self.ui.confirmBt.clicked.connect(self.confirmClicked)
         self.ui.removeBt.clicked.connect(self.removeClicked)
@@ -149,7 +151,10 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.loadParams()
 
     def audioDialog(self):
-        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Select audio', '.', "Audios (*.mp3 *.wav *.flac)")[0]
+        default_dir = self.params.get('default_audio_dir', '.')
+        if default_dir != '.' and not os.path.isdir(default_dir):
+            default_dir = '.'
+        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Select audio', default_dir, "Audios (*.mp3 *.wav *.flac)")[0]
         if fname != '':
             self.ui.audioCheck.setChecked(True)
             self.ui.audioLabel.setText(fname)
@@ -159,17 +164,33 @@ class Mainwindow(QtWidgets.QMainWindow):
                 self.ui.txtLabel.setText(file)
 
     def txtDialog(self):
-        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Select txt', '.', "Txt (*.txt *.lab *.Textgrid)")[0]
+        default_dir = self.params.get('default_txt_dir', '.')
+        if default_dir != '.' and not os.path.isdir(default_dir):
+            default_dir = '.'
+        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Select txt', default_dir, "Txt (*.txt *.lab *.Textgrid)")[0]
         if fname != '':
             self.ui.txtCheck.setChecked(True)
             self.ui.txtLabel.setText(fname)
 
     def outdirDialog(self):
-        fname = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select outdir', '.')
+        default_dir = self.params.get('default_out_dir', '.')
+        if default_dir != '.' and not os.path.isdir(default_dir):
+            default_dir = '.'
+        fname = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select outdir', default_dir)
         if fname != '':
             self.ui.outdirCheck.setChecked(True)
             self.ui.outdirLabel.setText(fname)
 
+    def dirsAsDefaultClicked(self):
+        if self.ui.audioCheck.isChecked():
+            self.params['default_audio_dir'] = os.path.dirname(self.ui.audioLabel.text())
+        if self.ui.txtCheck.isChecked():
+            self.params['default_txt_dir'] = os.path.dirname(self.ui.txtLabel.text())
+        if self.ui.outdirCheck.isChecked():
+            self.params['default_out_dir'] = self.ui.outdirLabel.text()
+
+        with open('params.json', 'w') as params_json:
+            json.dump(self.params, params_json)
 
     def processBtClicked(self):
         if self.ui.audioCheck.isChecked() and self.ui.txtCheck.isChecked() and self.ui.outdirCheck.isChecked():
@@ -271,6 +292,14 @@ class Mainwindow(QtWidgets.QMainWindow):
 
     def stopClicked(self):
         self.player.stop()
+
+    def getPrevDiffClicked(self):
+        self.ui.recognizedTE.clear()
+        self.ui.currentTE.clear()
+        if not os.path.isdir(f'{self.ui.outdirLabel.text()}/diff') or self.diffIdx is None or len(self.diffFiles) == 0:
+            return
+        self.diffIdx = (self.diffIdx + len(self.diffFiles) - 1) % len(self.diffFiles)
+        self.loadDiff()
 
     def getNextDiffClicked(self):
         self.ui.recognizedTE.clear()
