@@ -1,10 +1,1 @@
-{
-    "min_sample_len sec": 3, 
-    "max_sample_len sec": 25, 
-    "sampling_rate": 22050, 
-    "silence_threshold db": -50, 
-    "min_accuracy %": 50, 
-    "min_silence_len ms": 800, 
-    "keep_silence ms": 300, 
-    "min_correct_accuracy %": 100
-}
+{"min_sample_len sec": 4, "max_sample_len sec": 25, "sampling_rate": 22050, "silence_threshold db": -50, "min_accuracy %": 0, "min_silence_len ms": 800, "keep_silence ms": 300}

@@ -28,7 +28,6 @@ class Settingswindow(QtWidgets.QMainWindow):
         self.ui.minSilenceLenTE.setValidator(validator)
         self.ui.maxSampleLenTE.setValidator(validator)
         self.ui.keepSilenceTE.setValidator(validator)
-        self.ui.minCorrectAccuracyTE.setValidator(validator)
 
         self.ui.saveBt.clicked.connect(self.saveClicked)
         self.ui.defaultBt.clicked.connect(self.defaultClicked)
@@ -41,7 +40,6 @@ class Settingswindow(QtWidgets.QMainWindow):
         self.params[self.ui.minSilenceLenLabel.text()] = int(self.ui.minSilenceLenTE.text())
         self.params[self.ui.maxSampleLenLabel.text()] = int(self.ui.maxSampleLenTE.text())
         self.params[self.ui.keepSilenceLabel.text()] = int(self.ui.keepSilenceTE.text())
-        self.params[self.ui.minCorrectAccuracyLabel.text()] = int(self.ui.minCorrectAccuracyTE.text())
         
         with open('params.json', 'w') as params_json:
             json.dump(self.params, params_json)
@@ -54,7 +52,6 @@ class Settingswindow(QtWidgets.QMainWindow):
         self.params[self.ui.minAccuracyLabel.text()] = 60
         self.params[self.ui.minSilenceLenLabel.text()] = 800
         self.params[self.ui.keepSilenceLabel.text()] = 300
-        self.params[self.ui.minCorrectAccuracyLabel.text()] = 97
         self.showParams()
 
     def showParams(self):
@@ -65,4 +62,3 @@ class Settingswindow(QtWidgets.QMainWindow):
         self.ui.minSilenceLenTE.setText(str(self.params[self.ui.minSilenceLenLabel.text()]))
         self.ui.maxSampleLenTE.setText(str(self.params[self.ui.maxSampleLenLabel.text()]))
         self.ui.keepSilenceTE.setText(str(self.params[self.ui.keepSilenceLabel.text()]))
-        self.ui.minCorrectAccuracyTE.setText(str(self.params[self.ui.minCorrectAccuracyLabel.text()]))

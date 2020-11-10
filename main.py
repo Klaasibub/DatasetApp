@@ -20,17 +20,16 @@ class ProcessingThread(QtCore.QThread):
     def __init__(self, parent=None):
         QtCore.QThread.__init__(self, parent)
 
-        self.audioPath:str = None
-        self.outdirPath:str = None
-        self.txtPath:str = None
-        self.min_sec:int = 5
-        self.max_sec:int = 25
-        self.min_accuracy:int = 60
-        self.max_accuracy:int = 100
-        self.sampling_rate:int = 22050
-        self.min_silence_len:int = 700
-        self.keep_silence:int = 300
-        self.silence_thresh:int = -55
+        self.audioPath:str
+        self.outdirPath:str
+        self.txtPath:str
+        self.min_sec:int
+        self.max_sec:int
+        self.min_accuracy:int
+        self.sampling_rate:int
+        self.min_silence_len:int
+        self.keep_silence:int
+        self.silence_thresh:int
 
     def run(self):
         filename = self.audioPath
@@ -75,19 +74,12 @@ class ProcessingThread(QtCore.QThread):
                     with open(f'{outdir}/{sample_name}.txt', 'w', encoding='utf-8') as text:
                         text.write(output)
                     
-                    if rate < self.max_accuracy:
-                        if not os.path.isdir(f'{outdir}/diff'):
-                            os.mkdir(f'{outdir}/diff')
-                            
-                        with open(f'{outdir}/diff/{sample_name}.txt', 'w', encoding='utf-8') as text:
-                            text.write('\n'.join(text_difference(output, result)))
-                    else:
-                        if not os.path.isdir(f'{outdir}/correct'):
-                            os.mkdir(f'{outdir}/correct')
-                        shutil.copy(f'{outdir}/{sample_name}.txt', f'{outdir}/correct/{sample_name}.txt')
-                        shutil.copy(f'{outdir}/{sample_name}.wav', f'{outdir}/correct/{sample_name}.wav')
-                        os.remove(f'{outdir}/{sample_name}.txt')
-                        os.remove(f'{outdir}/{sample_name}.wav')
+                    if not os.path.isdir(f'{outdir}/diff'):
+                        os.mkdir(f'{outdir}/diff')
+
+                    with open(f'{outdir}/diff/{sample_name}.txt', 'w', encoding='utf-8') as text:
+                        text.write('\n'.join(text_difference(output, result)))
+
 
         self.finish_signal.emit(True, None, None) 
 
@@ -178,11 +170,8 @@ class Mainwindow(QtWidgets.QMainWindow):
             self.ui.outdirCheck.setChecked(True)
             self.ui.outdirLabel.setText(fname)
 
+
     def processBtClicked(self):
-        thread = Thread(target=self.processing, args=())
-        thread.start()
-        
-    def processing(self):
         if self.ui.audioCheck.isChecked() and self.ui.txtCheck.isChecked() and self.ui.outdirCheck.isChecked():
             if not (os.path.isfile(self.ui.audioLabel.text()) and os.path.isfile(self.ui.txtLabel.text()) and os.path.isdir(self.ui.outdirLabel.text())):
                 return
@@ -191,13 +180,14 @@ class Mainwindow(QtWidgets.QMainWindow):
             self.statusText = "Split and recognize audio... "
             self.timerFlag = True
 
+            self.loadParams()
+
             self.thread.audioPath = self.ui.audioLabel.text()
             self.thread.outdirPath = self.ui.outdirLabel.text()
             self.thread.txtPath = self.ui.txtLabel.text()
             self.thread.min_sec = self.params['min_sample_len sec']
             self.thread.max_sec = self.params['max_sample_len sec']
             self.thread.min_accuracy = self.params['min_accuracy %']
-            self.thread.max_accuracy = self.params['min_correct_accuracy %']
             self.thread.sampling_rate = self.params['sampling_rate']
             self.thread.min_silence_len = self.params['min_silence_len ms']
             self.thread.keep_silence = self.params['keep_silence ms']
@@ -292,14 +282,15 @@ class Mainwindow(QtWidgets.QMainWindow):
 
     def loadDiff(self):
         outdir = self.ui.outdirLabel.text()
-        if len(self.diffFiles) == 0 or self.diffIdx > len(self.diffFiles):
+        if len(self.diffFiles) == 0:
             return
+        self.diffIdx = self.diffIdx % len(self.diffFiles)
         diff_file = os.path.basename(self.diffFiles[self.diffIdx])
-        filename = diff_file.rsplit(".", 1)[0]
+        filename = diff_file.rsplit('.', 1)[0]
 
         if not is_path_to_txt(diff_file) or not os.path.isfile(f'{outdir}/{filename}.wav'):
             return
-            
+        
         with open(f'{outdir}/diff/{diff_file}', 'r', encoding='utf-8') as f:
             diff_text = f.read().splitlines()
         plain_text = ''
@@ -365,7 +356,6 @@ class Mainwindow(QtWidgets.QMainWindow):
 
         self.diffIdx = 0
         self.loadDiff()
-        
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

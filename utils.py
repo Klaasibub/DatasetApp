@@ -49,12 +49,23 @@ def split_audio_by_pauses(filename: str, outdir: str, min_sec: int = 3, max_sec:
     sound_file = safe_audiosegment(filename, framerate)
     if sound_file is None:
         return
-    audio_chunks = split_on_silence(sound_file, min_silence_len, silence_thresh, keep_silence=keep_silence)
+    
+    audio_chunks = split_on_silence(sound_file, min_silence_len, silence_thresh=silence_thresh, keep_silence=keep_silence, seek_step=min_sec)
+    print('Samples from file =', len(audio_chunks))
+    count, lt, gt = 0, 0, 0
     for i, chunk in enumerate(audio_chunks):
         if max_sec >= chunk.duration_seconds >= min_sec:
+            count += 1
             filename = filename.rsplit('.', 1)[0]
             out_file = f"{outdir}/{os.path.basename(filename)}_{str(i+1).zfill(5)}.wav"
             chunk.export(out_file, format="wav")
+        elif max_sec < chunk.duration_seconds:
+            gt += 1
+        elif min_sec > chunk.duration_seconds:
+            lt += 1
+    print('Samples less than', min_sec, 'sec =', lt)
+    print('Samples more than', max_sec, 'sec =', gt)
+    print('Acceptable samples count =', count)
 
 def speech_recognize(filename: str, language: str = 'ru-RU') -> str:
     '''
@@ -95,54 +106,59 @@ class StringComparison:
 
     def __push_left(self) -> None:
         if not self.__best_pos > 0:
-            return
+            return False
         self.__best_pos -= 1
         self.__length += 1
         self.__words.insert(0, self.__origin_tokens[self.__words_idx[self.__best_pos]])
         self.__indexes.insert(0, self.__words_idx[self.__best_pos])
+        return True
 
     def __pop_left(self) -> None:
         if self.__length == 0:
-            return
+            return False
         self.__best_pos += 1
         self.__length -= 1
         self.__words.pop(0)
         self.__indexes.pop(0)
+        return True
 
     def __push_right(self) -> None:
-        if self.__best_pos + self.__length - 2 < self.__max_idx:
-            return
+        if self.__best_pos + self.__length >= len(self.__words_idx):
+            return False
         idx = self.__best_pos + self.__length
         self.__words.append(self.__origin_tokens[self.__words_idx[idx]])
         self.__indexes.append(self.__words_idx[idx])
         self.__length += 1
+        return True
 
     def __pop_right(self) -> None:
         if self.__length == 0:
-            return
+            return False
         self.__length -= 1
         self.__words.pop()
         self.__indexes.pop()
+        return True
 
     def __pad(self, func1, func2) -> None:
         while True:
-            func1()
+            if not func1():
+                break
             original_str = ' '.join(self.__words)
-            rate = fuzz.ratio(original_str.lower(), self.__asr.lower())
-            if rate > self.__max_rate:
+            rate = fuzz.token_sort_ratio(original_str.lower(), self.__asr.lower())
+            if rate >= self.__max_rate:
                 self.__max_rate = rate
             else:
                 func2()
                 break
 
-    def find(self, asr: str, last_pos: int = 0) -> (int, int, str):
+    def find(self, asr: str) -> (int, int, str):
         self.__words.clear()
         self.__indexes.clear()
         self.__asr = asr
         self.__length = min(len(self.__asr.split(' ')), self.__max_idx)
 
         self.__max_rate = 0
-        self.__best_pos = max(0, last_pos) if last_pos + self.__length < self.__max_idx else 0 
+        self.__best_pos = 0 
 
         for idx in range(self.__best_pos, self.__best_pos + self.__length):
             self.__words.append(self.__origin_tokens[self.__words_idx[idx]])
@@ -150,7 +166,7 @@ class StringComparison:
 
         for idx in range(self.__best_pos, self.__max_idx - self.__length):
             original_str = ' '.join(self.__words)
-            rate = fuzz.ratio(original_str.lower(), self.__asr.lower())
+            rate = fuzz.token_sort_ratio(original_str.lower(), self.__asr.lower())
             if rate > self.__max_rate:
                 self.__max_rate = rate
                 self.__best_pos = idx
@@ -163,17 +179,24 @@ class StringComparison:
             self.__words.pop(0)
             self.__indexes.pop(0)
 
+        self.__words.clear()
+        self.__indexes.clear()
+        for idx in range(self.__best_pos, self.__best_pos + self.__length):
+            self.__words.append(self.__origin_tokens[self.__words_idx[idx]])
+            self.__indexes.append(self.__words_idx[idx])
+
         self.__pad(self.__push_left, self.__pop_left)
         self.__pad(self.__push_right, self.__pop_right)
         self.__pad(self.__pop_left, self.__push_left)
         self.__pad(self.__pop_right, self.__push_right)
-        
-        original_str = ' '.join(self.__words)
+        if len(self.__indexes) == 0:
+            return self.__best_pos, self.__max_rate, self.__asr
         first_word_idx = self.__indexes[0]
-        last_word_idx = self.__indexes[-1] + 1
-        if len(self.__origin_tokens) > last_word_idx+1 and not self.__origin_tokens[last_word_idx+1].isalpha():
+        last_word_idx = self.__indexes[-1]
+        while len(self.__origin_tokens) > last_word_idx+1 and not self.__origin_tokens[last_word_idx+1].isalpha():
             last_word_idx += 1
-        output = ' '.join([part for part in self.__origin_tokens[first_word_idx:last_word_idx]])
+
+        output = ' '.join([part for part in self.__origin_tokens[first_word_idx:last_word_idx+1]])
 
         pat = r"\s+([{}]+)".format(re.escape(string.punctuation))
         res = re.sub(r"\s{2,}", " ", re.sub(pat, r"\1", output))

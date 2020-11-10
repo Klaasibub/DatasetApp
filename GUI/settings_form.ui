@@ -17,9 +17,9 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>368</y>
-     <width>80</width>
-     <height>21</height>
+     <y>343</y>
+     <width>75</width>
+     <height>23</height>
     </rect>
    </property>
    <property name="text">
@@ -29,10 +29,10 @@
   <widget class="QPushButton" name="saveBt">
    <property name="geometry">
     <rect>
-     <x>134</x>
-     <y>368</y>
-     <width>108</width>
-     <height>21</height>
+     <x>113</x>
+     <y>343</y>
+     <width>128</width>
+     <height>23</height>
     </rect>
    </property>
    <property name="text">
@@ -43,7 +43,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>24</y>
+     <y>28</y>
      <width>79</width>
      <height>16</height>
     </rect>
@@ -55,47 +55,21 @@
   <widget class="QLineEdit" name="minAccuracyTE">
    <property name="geometry">
     <rect>
-     <x>134</x>
-     <y>24</y>
-     <width>108</width>
-     <height>22</height>
+     <x>113</x>
+     <y>28</y>
+     <width>128</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>60</string>
    </property>
   </widget>
-  <widget class="QLabel" name="minCorrectAccuracyLabel">
-   <property name="geometry">
-    <rect>
-     <x>9</x>
-     <y>67</y>
-     <width>119</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>min_correct_accuracy %</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="minCorrectAccuracyTE">
-   <property name="geometry">
-    <rect>
-     <x>134</x>
-     <y>67</y>
-     <width>108</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>97</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="minSampleLenLabel">
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>110</y>
+     <y>73</y>
      <width>94</width>
      <height>16</height>
     </rect>
@@ -107,10 +81,10 @@
   <widget class="QLineEdit" name="minSampleLenTE">
    <property name="geometry">
     <rect>
-     <x>134</x>
-     <y>110</y>
-     <width>108</width>
-     <height>22</height>
+     <x>113</x>
+     <y>73</y>
+     <width>128</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
@@ -121,7 +95,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>153</y>
+     <y>118</y>
      <width>98</width>
      <height>16</height>
     </rect>
@@ -133,10 +107,10 @@
   <widget class="QLineEdit" name="maxSampleLenTE">
    <property name="geometry">
     <rect>
-     <x>134</x>
-     <y>153</y>
-     <width>108</width>
-     <height>22</height>
+     <x>113</x>
+     <y>118</y>
+     <width>128</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
@@ -147,7 +121,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>196</y>
+     <y>163</y>
      <width>98</width>
      <height>16</height>
     </rect>
@@ -159,10 +133,10 @@
   <widget class="QLineEdit" name="silenceThresholdTE">
    <property name="geometry">
     <rect>
-     <x>134</x>
-     <y>196</y>
-     <width>108</width>
-     <height>22</height>
+     <x>113</x>
+     <y>163</y>
+     <width>128</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
@@ -173,7 +147,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>239</y>
+     <y>208</y>
      <width>67</width>
      <height>16</height>
     </rect>
@@ -185,10 +159,10 @@
   <widget class="QLineEdit" name="samplingRateTE">
    <property name="geometry">
     <rect>
-     <x>134</x>
-     <y>239</y>
-     <width>108</width>
-     <height>22</height>
+     <x>113</x>
+     <y>208</y>
+     <width>128</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
@@ -199,7 +173,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>282</y>
+     <y>253</y>
      <width>90</width>
      <height>16</height>
     </rect>
@@ -211,10 +185,10 @@
   <widget class="QLineEdit" name="minSilenceLenTE">
    <property name="geometry">
     <rect>
-     <x>134</x>
-     <y>282</y>
-     <width>108</width>
-     <height>22</height>
+     <x>113</x>
+     <y>253</y>
+     <width>128</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
@@ -225,7 +199,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>325</y>
+     <y>298</y>
      <width>77</width>
      <height>16</height>
     </rect>
@@ -237,10 +211,10 @@
   <widget class="QLineEdit" name="keepSilenceTE">
    <property name="geometry">
     <rect>
-     <x>134</x>
-     <y>325</y>
-     <width>108</width>
-     <height>22</height>
+     <x>113</x>
+     <y>298</y>
+     <width>128</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
