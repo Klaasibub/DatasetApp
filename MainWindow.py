@@ -10,7 +10,7 @@ from chardet.universaldetector import UniversalDetector
 from PyQt5 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
 from form import Ui_Mainwindow
 from utils import split_audio_by_pauses, is_path_to_txt, is_path_to_audio, speech_recognize, \
-                  StringComparison, text_difference
+                  StringComparison, text_difference, log
 from settings import Settingswindow
 
 class ProcessingThread(QtCore.QThread):
@@ -29,6 +29,8 @@ class ProcessingThread(QtCore.QThread):
         self.min_silence_len:int
         self.keep_silence:int
         self.silence_thresh:int
+        self.begin:int = -1
+        self.end:int = -1
 
     def run(self):
         filename = self.audioPath
@@ -38,10 +40,11 @@ class ProcessingThread(QtCore.QThread):
         if not os.path.isdir(outdir):
             os.mkdir(outdir)
 
-        # split audio 
+        # split audio
         split_audio_by_pauses(filename, outdir, self.min_sec, self.max_sec,
                               min_silence_len=self.min_silence_len, silence_thresh=self.silence_thresh,
-                              keep_silence=self.keep_silence, framerate=self.sampling_rate)
+                              keep_silence=self.keep_silence, framerate=self.sampling_rate,
+                              begin=self.begin, end=self.end)
 
         # speech recognize
         detector = UniversalDetector()
@@ -110,6 +113,9 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.loadParams()
 
     def initUi(self):
+
+        # FIRST PAGE
+
         self.ui.paramsBt.clicked.connect(self.paramsClicked)
 
         self.ui.audioBt.clicked.connect(self.audioDialog)
@@ -117,6 +123,10 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.ui.outdirBt.clicked.connect(self.outdirDialog)
         self.ui.asDefaultBt.clicked.connect(self.dirsAsDefaultClicked)
         self.ui.processBt.clicked.connect(self.processBtClicked)
+        
+        self.ui.customTimeCB.stateChanged.connect(self.customTimeStateChanged)
+
+        # SECOND PAGE
 
         self.ui.fixDiffBt.clicked.connect(self.onFixDiffClicked)
         self.ui.backBt.clicked.connect(self.backClicked)
@@ -143,6 +153,8 @@ class Mainwindow(QtWidgets.QMainWindow):
 
         with open('params.json', 'r') as params_json:
             self.params = json.load(params_json)
+
+    # FIRST PAGE
 
     def paramsClicked(self):
         self.widget = Settingswindow()
@@ -212,6 +224,11 @@ class Mainwindow(QtWidgets.QMainWindow):
             self.thread.min_silence_len = self.params['min_silence_len ms']
             self.thread.keep_silence = self.params['keep_silence ms']
             self.thread.silence_thresh = self.params['silence_threshold db']
+            if self.ui.customTimeCB.isChecked():
+                t1 = self.ui.beginTimeEdit_2.time()
+                t2 = self.ui.endTimeEdit_2.time()
+                self.thread.begin =  t1.second() + t1.minute()*60
+                self.thread.end = t2.second() + t2.minute()*60
 
             self.thread.start()
     
@@ -225,6 +242,13 @@ class Mainwindow(QtWidgets.QMainWindow):
             self.currentTime += 1
         else:
             self.statusBar().showMessage(self.statusText)
+
+    def customTimeStateChanged(self):
+        b = self.ui.customTimeCB.isChecked()
+        self.ui.beginTimeEdit_2.setEnabled(b)
+        self.ui.endTimeEdit_2.setEnabled(b)
+
+    # SECOND PAGE
 
     def onFixDiffClicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)

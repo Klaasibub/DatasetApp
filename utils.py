@@ -13,8 +13,13 @@ from pydub import AudioSegment
 from nltk import word_tokenize, download
 from fuzzywuzzy import fuzz
 from difflib import Differ
+from datetime import datetime
+from pprint import pprint
 
 download('punkt')
+
+def log(message):
+    pprint(f'log {datetime.now()}; msg: {message}')
 
 def is_path_to_audio(file: str) -> bool:
     extension = file.rsplit('.', 1)[-1]
@@ -45,13 +50,27 @@ def safe_audiosegment(audioPath: str, framerate: int = 22050) -> AudioSegment:
 
 def split_audio_by_pauses(filename: str, outdir: str, min_sec: int = 3, max_sec: int = 25,
                           min_silence_len: int = 800, silence_thresh: int = -50,
-                          keep_silence: int = 400, framerate: int = 22050) -> None:
+                          keep_silence: int = 400, framerate: int = 22050, begin: int = -1, end: int = -1) -> None:
+
+    log('Uploading audio...')
     sound_file = safe_audiosegment(filename, framerate)
     if sound_file is None:
         return
-    
+    log('Audio uploaded!')
+
+    duration = sound_file.duration_seconds
+    begin = max(begin, 0) if begin > 0 else 0
+    end = end if end > 0 else duration
+
+    if begin > end:
+        begin, end = end, begin
+
+    begin = max(begin, 0)
+    end = min(end, duration)
+    sound_file = sound_file[int(begin*1000):int(end*1000)]
+
     audio_chunks = split_on_silence(sound_file, min_silence_len, silence_thresh=silence_thresh, keep_silence=keep_silence, seek_step=min_sec)
-    print('Samples from file =', len(audio_chunks))
+    log(f'Samples from file = {len(audio_chunks)}')
     count, lt, gt = 0, 0, 0
     for i, chunk in enumerate(audio_chunks):
         if max_sec >= chunk.duration_seconds >= min_sec:
@@ -63,9 +82,9 @@ def split_audio_by_pauses(filename: str, outdir: str, min_sec: int = 3, max_sec:
             gt += 1
         elif min_sec > chunk.duration_seconds:
             lt += 1
-    print('Samples less than', min_sec, 'sec =', lt)
-    print('Samples more than', max_sec, 'sec =', gt)
-    print('Acceptable samples count =', count)
+    log(f'Samples less than {min_sec} sec = {lt}')
+    log(f'Samples more than {max_sec} sec = {gt}')
+    log(f'Acceptable samples count = {count}')
 
 def speech_recognize(filename: str, language: str = 'ru-RU') -> str:
     '''
