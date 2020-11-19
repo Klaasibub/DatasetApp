@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1279</width>
-    <height>485</height>
+    <height>446</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -339,6 +339,16 @@ border-bottom-left-radius: 9px;
               <property name="leftMargin">
                <number>50</number>
               </property>
+              <item>
+               <widget class="QTimeEdit" name="beginTimeEdit">
+                <property name="currentSection">
+                 <enum>QDateTimeEdit::SecondSection</enum>
+                </property>
+                <property name="displayFormat">
+                 <string>ss:zzz</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
             <item>
@@ -356,22 +366,39 @@ border-bottom-left-radius: 9px;
             </item>
             <item>
              <widget class="QPushButton" name="stopBt">
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">image: url(:/icons/Stop.png);</string>
+              </property>
               <property name="text">
-               <string>Stop</string>
+               <string/>
+              </property>
+              <property name="default">
+               <bool>false</bool>
+              </property>
+              <property name="flat">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="playBt">
-              <property name="text">
-               <string>Play</string>
+              <property name="autoFillBackground">
+               <bool>false</bool>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pauseBt">
+              <property name="styleSheet">
+               <string notr="true">image: url(:/icons/PlayPause.png);</string>
+              </property>
               <property name="text">
-               <string>Pause</string>
+               <string/>
+              </property>
+              <property name="default">
+               <bool>false</bool>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -396,6 +423,13 @@ border-bottom-left-radius: 9px;
               <property name="rightMargin">
                <number>50</number>
               </property>
+              <item>
+               <widget class="QTimeEdit" name="endTimeEdit">
+                <property name="displayFormat">
+                 <string>ss:zzz</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
            </layout>
@@ -599,6 +633,8 @@ color: rgb(0, 0, 0);</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

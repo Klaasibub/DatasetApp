@@ -97,7 +97,6 @@ def speech_recognize(filename: str, language: str = 'ru-RU') -> str:
     try:
         result = recognizer.recognize_google(audio_content, language=language)
     except Exception as ex:
-        print('Error:', ex)
         os.remove(filename)
         return ''
     return result

@@ -14,8 +14,68 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Mainwindow(object):
     def setupUi(self, Mainwindow):
         Mainwindow.setObjectName("Mainwindow")
-        Mainwindow.resize(1279, 485)
-        Mainwindow.setStyleSheet("")
+        Mainwindow.resize(1279, 446)
+        Mainwindow.setStyleSheet("QSpinBox {\n"
+"    padding-right: 15px; /* make room for the arrows */\n"
+"    border-image: url(:/images/frame.png) 4;\n"
+"    border-width: 3;\n"
+"}\n"
+"\n"
+"QSpinBox::up-button {\n"
+"    subcontrol-origin: border;\n"
+"    subcontrol-position: top right; /* position at the top right corner */\n"
+"\n"
+"    width: 16px; /* 16 + 2*1px border-width = 15px padding + 3px parent border */\n"
+"    border-image: url(:/images/spinup.png) 1;\n"
+"    border-width: 1px;\n"
+"}\n"
+"\n"
+"QSpinBox::up-button:hover {\n"
+"    border-image: url(:/images/spinup_hover.png) 1;\n"
+"}\n"
+"\n"
+"QSpinBox::up-button:pressed {\n"
+"    border-image: url(:/images/spinup_pressed.png) 1;\n"
+"}\n"
+"\n"
+"QSpinBox::up-arrow {\n"
+"    image: url(:/images/up_arrow.png);\n"
+"    width: 7px;\n"
+"    height: 7px;\n"
+"}\n"
+"\n"
+"QSpinBox::up-arrow:disabled, QSpinBox::up-arrow:off { /* off state when value is max */\n"
+"   image: url(:/images/up_arrow_disabled.png);\n"
+"}\n"
+"\n"
+"QSpinBox::down-button {\n"
+"    subcontrol-origin: border;\n"
+"    subcontrol-position: bottom right; /* position at bottom right corner */\n"
+"\n"
+"    width: 16px;\n"
+"    border-image: url(:/images/spindown.png) 1;\n"
+"    border-width: 1px;\n"
+"    border-top-width: 0;\n"
+"}\n"
+"\n"
+"QSpinBox::down-button:hover {\n"
+"    border-image: url(:/images/spindown_hover.png) 1;\n"
+"}\n"
+"\n"
+"QSpinBox::down-button:pressed {\n"
+"    border-image: url(:/images/spindown_pressed.png) 1;\n"
+"}\n"
+"\n"
+"QSpinBox::down-arrow {\n"
+"    image: url(:/images/down_arrow.png);\n"
+"    width: 7px;\n"
+"    height: 7px;\n"
+"}\n"
+"\n"
+"QSpinBox::down-arrow:disabled,\n"
+"QSpinBox::down-arrow:off { /* off state when value in min */\n"
+"   image: url(:/images/down_arrow_disabled.png);\n"
+"}")
         self.centralwidget = QtWidgets.QWidget(Mainwindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -193,23 +253,37 @@ class Ui_Mainwindow(object):
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_7.setContentsMargins(50, -1, -1, -1)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.beginTimeEdit = QtWidgets.QTimeEdit(self.page_2)
+        self.beginTimeEdit.setCurrentSection(QtWidgets.QDateTimeEdit.SecondSection)
+        self.beginTimeEdit.setObjectName("beginTimeEdit")
+        self.horizontalLayout_7.addWidget(self.beginTimeEdit)
         self.horizontalLayout_8.addLayout(self.horizontalLayout_7)
         spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_8.addItem(spacerItem4)
         self.stopBt = QtWidgets.QPushButton(self.page_2)
+        self.stopBt.setAutoFillBackground(False)
+        self.stopBt.setStyleSheet("image: url(:/icons/Stop.png);")
+        self.stopBt.setText("")
+        self.stopBt.setDefault(False)
+        self.stopBt.setFlat(False)
         self.stopBt.setObjectName("stopBt")
         self.horizontalLayout_8.addWidget(self.stopBt)
         self.playBt = QtWidgets.QPushButton(self.page_2)
+        self.playBt.setAutoFillBackground(False)
+        self.playBt.setStyleSheet("image: url(:/icons/PlayPause.png);")
+        self.playBt.setText("")
+        self.playBt.setDefault(False)
+        self.playBt.setFlat(True)
         self.playBt.setObjectName("playBt")
         self.horizontalLayout_8.addWidget(self.playBt)
-        self.pauseBt = QtWidgets.QPushButton(self.page_2)
-        self.pauseBt.setObjectName("pauseBt")
-        self.horizontalLayout_8.addWidget(self.pauseBt)
         spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_8.addItem(spacerItem5)
         self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_9.setContentsMargins(0, -1, 50, -1)
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.endTimeEdit = QtWidgets.QTimeEdit(self.page_2)
+        self.endTimeEdit.setObjectName("endTimeEdit")
+        self.horizontalLayout_9.addWidget(self.endTimeEdit)
         self.horizontalLayout_8.addLayout(self.horizontalLayout_9)
         self.gridLayout_3.addLayout(self.horizontalLayout_8, 0, 0, 1, 1)
         self.gridLayout_6.addLayout(self.gridLayout_3, 4, 0, 1, 1)
@@ -333,9 +407,8 @@ class Ui_Mainwindow(object):
         self.processBt.setText(_translate("Mainwindow", "Preprocess"))
         self.paramsBt.setText(_translate("Mainwindow", "Change params"))
         self.fixDiffBt.setText(_translate("Mainwindow", "Fix diff"))
-        self.stopBt.setText(_translate("Mainwindow", "Stop"))
-        self.playBt.setText(_translate("Mainwindow", "Play"))
-        self.pauseBt.setText(_translate("Mainwindow", "Pause"))
+        self.beginTimeEdit.setDisplayFormat(_translate("Mainwindow", "ss:zzz"))
+        self.endTimeEdit.setDisplayFormat(_translate("Mainwindow", "ss:zzz"))
         self.confirmBt.setText(_translate("Mainwindow", "Confirm"))
         self.removeBt.setText(_translate("Mainwindow", "Remove"))
         self.getPrevDiffBt.setText(_translate("Mainwindow", "Get previous diff"))
@@ -344,3 +417,4 @@ class Ui_Mainwindow(object):
         self.backBt.setText(_translate("Mainwindow", "back"))
         self.label_4.setText(_translate("Mainwindow", "Current:"))
         self.label_3.setText(_translate("Mainwindow", "Recognized:"))
+import resources_rc

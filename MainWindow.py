@@ -10,11 +10,11 @@ from chardet.universaldetector import UniversalDetector
 from PyQt5 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
 from form import Ui_Mainwindow
 from utils import split_audio_by_pauses, is_path_to_txt, is_path_to_audio, speech_recognize, \
-                  StringComparison, text_difference, log
+                  StringComparison, text_difference, log, safe_audiosegment
 from settings import Settingswindow
 
 class ProcessingThread(QtCore.QThread):
-    finish_signal = QtCore.pyqtSignal(object, object, object)
+    finish_signal = QtCore.pyqtSignal(object, object, object) # ToDo: Refactoring
 
     def __init__(self, parent=None):
         QtCore.QThread.__init__(self, parent)
@@ -85,6 +85,7 @@ class ProcessingThread(QtCore.QThread):
 
         self.finish_signal.emit(True, None, None) 
 
+
 class Mainwindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(Mainwindow, self).__init__()
@@ -112,7 +113,12 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.player = QtMultimedia.QMediaPlayer()
         self.loadParams()
 
+        self.leftEdge = 0
+        self.rightEdge = 0
+
+
     def initUi(self):
+        self.initShortcuts()
 
         # FIRST PAGE
 
@@ -138,12 +144,16 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.ui.removeBt.clicked.connect(self.removeClicked)
         self.ui.slider.sliderMoved.connect(self.changeAudioValue)
         self.ui.playBt.clicked.connect(self.playClicked)
-        self.ui.pauseBt.clicked.connect(self.pauseClicked)
         self.ui.stopBt.clicked.connect(self.stopClicked)
         
         self.thread = ProcessingThread(self)
         self.thread.finish_signal.connect(self.stopProcessing)
-        
+
+    def initShortcuts(self):
+        QtWidgets.QShortcut(QtGui.QKeySequence(("Ctrl+Space")), self).activated.connect(self.playClicked)
+        QtWidgets.QShortcut(QtGui.QKeySequence(("Ctrl+Alt+Left")), self).activated.connect(self.leftClicked)
+        QtWidgets.QShortcut(QtGui.QKeySequence(("Ctrl+Alt+Right")), self).activated.connect(self.rightClicked)
+
     def loadParams(self):
         if not os.path.isfile('params.json'):
             w = Settingswindow()
@@ -260,7 +270,20 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.player.play()
     
     def updateAudio(self):
+
+        t1 = self.ui.beginTimeEdit.time()
+        t2 = self.ui.endTimeEdit.time()
+
+        self.leftEdge = t1.msec() + 1000*(t1.second() + t1.minute()*60)
+        self.rightEdge = t2.msec() + 1000*(t2.second() + t2.minute()*60)
+
         self.ui.slider.setMaximum(self.player.duration())
+        if self.player.position() < self.leftEdge:
+            self.player.setPosition(self.leftEdge)
+        if self.player.position() + self.rightEdge > self.player.duration():
+            self.player.setPosition(self.player.duration()-self.rightEdge)
+            self.player.pause()
+
         self.ui.slider.setSliderPosition(self.player.position())
 
     def changeAudioValue(self):
@@ -282,7 +305,10 @@ class Mainwindow(QtWidgets.QMainWindow):
 
         sample_name = diff_file.rsplit('.', 1)[0]
         os.rename(f'{outdir}/{sample_name}.txt', f'{outdir}/correct/{sample_name}.txt')
-        os.rename(f'{outdir}/{sample_name}.wav', f'{outdir}/correct/{sample_name}.wav')
+        audio = safe_audiosegment(f'{outdir}/{sample_name}.wav')[self.leftEdge: -self.rightEdge]
+        audio.export(f'{outdir}/correct/{sample_name}.wav')
+        del audio
+        os.remove(f'{outdir}/{sample_name}.wav')
         
         self.diffFiles.pop(self.diffIdx)
         if self.diffIdx == 0:
@@ -308,13 +334,22 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.getNextDiffClicked()
 
     def playClicked(self):
-        self.player.play()
-
-    def pauseClicked(self):
-        self.player.pause()
+        if self.player.state() == QtMultimedia.QMediaPlayer.PlayingState:
+            self.player.pause()
+            log(f'left edge: {self.player.position()}ms, right edge: {self.player.duration() - self.player.position()}ms')
+        else:
+            if self.player.position() > self.player.duration() - self.rightEdge - 10:
+                self.player.setPosition(self.leftEdge)
+            self.player.play()
 
     def stopClicked(self):
         self.player.stop()
+
+    def leftClicked(self):
+        self.player.setPosition(max(0, self.player.position() - 3000))
+
+    def rightClicked(self):
+        self.player.setPosition(min(self.player.duration(), self.player.position() + 3000))
 
     def getPrevDiffClicked(self):
         self.ui.recognizedTE.clear()
