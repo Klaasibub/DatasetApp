@@ -149,10 +149,17 @@ class Mainwindow(QtWidgets.QMainWindow):
         self.thread = ProcessingThread(self)
         self.thread.finish_signal.connect(self.stopProcessing)
 
+        # speakers
+        self.ui.addSpeakerBt.clicked.connect(self.speakerAddClicked)
+        self.ui.deleteSpeaker.clicked.connect(self.speakerDeleteClicked)
+        self.ui.speakersList.itemClicked.connect(self.speakerClicked)
+
     def initShortcuts(self):
-        QtWidgets.QShortcut(QtGui.QKeySequence(("Ctrl+Space")), self).activated.connect(self.playClicked)
-        QtWidgets.QShortcut(QtGui.QKeySequence(("Ctrl+Alt+Left")), self).activated.connect(self.leftClicked)
-        QtWidgets.QShortcut(QtGui.QKeySequence(("Ctrl+Alt+Right")), self).activated.connect(self.rightClicked)
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Space"), self).activated.connect(self.playClicked)
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Alt+Left"), self).activated.connect(self.leftClicked)
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Alt+Right"), self).activated.connect(self.rightClicked)
+        QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Shift+Del"), self).activated.connect(self.removeClicked)
+        QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.SHIFT + QtCore.Qt.Key_Return), self).activated.connect(self.confirmClicked)
 
     def loadParams(self):
         if not os.path.isfile('params.json'):
@@ -180,7 +187,7 @@ class Mainwindow(QtWidgets.QMainWindow):
             self.ui.audioCheck.setChecked(True)
             self.ui.audioLabel.setText(fname)
             file = f'{fname.rsplit(".", 1)[0]}.txt'
-            if not self.ui.txtCheck.isChecked() and os.path.isfile(file):
+            if os.path.isfile(file):
                 self.ui.txtCheck.setChecked(True)
                 self.ui.txtLabel.setText(file)
 
@@ -241,7 +248,7 @@ class Mainwindow(QtWidgets.QMainWindow):
                 self.thread.end = t2.second() + t2.minute()*60
 
             self.thread.start()
-    
+
     def stopProcessing(self, one, two, three):
         self.statusText = "Complete!"
         self.timerFlag = False
@@ -268,7 +275,9 @@ class Mainwindow(QtWidgets.QMainWindow):
         content = QtMultimedia.QMediaContent(url)
         self.player.setMedia(content)
         self.player.play()
-    
+        self.ui.beginTimeEdit.clear()
+        self.ui.endTimeEdit.clear()
+
     def updateAudio(self):
 
         t1 = self.ui.beginTimeEdit.time()
@@ -303,13 +312,21 @@ class Mainwindow(QtWidgets.QMainWindow):
         if not os.path.isdir(f'{outdir}/correct'):
             os.mkdir(f'{outdir}/correct')
 
+        speaker_name = self.ui.currentSpeaker.text().split(':', 1)[1]
+        if speaker_name not in ['', ' ']:
+            if not os.path.isdir(f'{outdir}/correct/{speaker_name}'):
+                os.mkdir(f'{outdir}/correct/{speaker_name}')
+            speaker_name += '/'
+
         sample_name = diff_file.rsplit('.', 1)[0]
-        os.rename(f'{outdir}/{sample_name}.txt', f'{outdir}/correct/{sample_name}.txt')
-        audio = safe_audiosegment(f'{outdir}/{sample_name}.wav')[self.leftEdge: -self.rightEdge]
-        audio.export(f'{outdir}/correct/{sample_name}.wav')
+        
+        os.rename(f'{outdir}/{sample_name}.txt', f'{outdir}/correct/{speaker_name}{sample_name}.txt')
+        
+        audio = safe_audiosegment(f'{outdir}/{sample_name}.wav')[self.leftEdge: -self.rightEdge-5]
+        audio.export(f'{outdir}/correct/{speaker_name}{sample_name}.wav')
         del audio
         os.remove(f'{outdir}/{sample_name}.wav')
-        
+
         self.diffFiles.pop(self.diffIdx)
         if self.diffIdx == 0:
             self.diffIdx = len(self.diffFiles)-1
@@ -443,3 +460,18 @@ class Mainwindow(QtWidgets.QMainWindow):
 
         self.diffIdx = 0
         self.loadDiff()
+
+    # speakers
+
+    def speakerClicked(self, item:QtWidgets.QListWidgetItem):
+        self.ui.currentSpeaker.setText(f"Current speaker:{item.text()}")
+    
+    def speakerAddClicked(self):
+        self.ui.speakersList.insertItem(0, self.ui.speakerNameTE.text())
+
+    def speakerDeleteClicked(self):
+        listItems=self.ui.speakersList.selectedItems()
+        if not listItems:
+            return
+        for item in listItems:
+            self.ui.speakersList.takeItem(self.ui.speakersList.row(item))

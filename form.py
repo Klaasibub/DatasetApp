@@ -14,68 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Mainwindow(object):
     def setupUi(self, Mainwindow):
         Mainwindow.setObjectName("Mainwindow")
-        Mainwindow.resize(1279, 446)
-        Mainwindow.setStyleSheet("QSpinBox {\n"
-"    padding-right: 15px; /* make room for the arrows */\n"
-"    border-image: url(:/images/frame.png) 4;\n"
-"    border-width: 3;\n"
-"}\n"
-"\n"
-"QSpinBox::up-button {\n"
-"    subcontrol-origin: border;\n"
-"    subcontrol-position: top right; /* position at the top right corner */\n"
-"\n"
-"    width: 16px; /* 16 + 2*1px border-width = 15px padding + 3px parent border */\n"
-"    border-image: url(:/images/spinup.png) 1;\n"
-"    border-width: 1px;\n"
-"}\n"
-"\n"
-"QSpinBox::up-button:hover {\n"
-"    border-image: url(:/images/spinup_hover.png) 1;\n"
-"}\n"
-"\n"
-"QSpinBox::up-button:pressed {\n"
-"    border-image: url(:/images/spinup_pressed.png) 1;\n"
-"}\n"
-"\n"
-"QSpinBox::up-arrow {\n"
-"    image: url(:/images/up_arrow.png);\n"
-"    width: 7px;\n"
-"    height: 7px;\n"
-"}\n"
-"\n"
-"QSpinBox::up-arrow:disabled, QSpinBox::up-arrow:off { /* off state when value is max */\n"
-"   image: url(:/images/up_arrow_disabled.png);\n"
-"}\n"
-"\n"
-"QSpinBox::down-button {\n"
-"    subcontrol-origin: border;\n"
-"    subcontrol-position: bottom right; /* position at bottom right corner */\n"
-"\n"
-"    width: 16px;\n"
-"    border-image: url(:/images/spindown.png) 1;\n"
-"    border-width: 1px;\n"
-"    border-top-width: 0;\n"
-"}\n"
-"\n"
-"QSpinBox::down-button:hover {\n"
-"    border-image: url(:/images/spindown_hover.png) 1;\n"
-"}\n"
-"\n"
-"QSpinBox::down-button:pressed {\n"
-"    border-image: url(:/images/spindown_pressed.png) 1;\n"
-"}\n"
-"\n"
-"QSpinBox::down-arrow {\n"
-"    image: url(:/images/down_arrow.png);\n"
-"    width: 7px;\n"
-"    height: 7px;\n"
-"}\n"
-"\n"
-"QSpinBox::down-arrow:disabled,\n"
-"QSpinBox::down-arrow:off { /* off state when value in min */\n"
-"   image: url(:/images/down_arrow_disabled.png);\n"
-"}")
+        Mainwindow.resize(1020, 600)
+        Mainwindow.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(Mainwindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -209,8 +149,47 @@ class Ui_Mainwindow(object):
         self.page_2.setObjectName("page_2")
         self.gridLayout_6 = QtWidgets.QGridLayout(self.page_2)
         self.gridLayout_6.setObjectName("gridLayout_6")
-        self.gridLayout_3 = QtWidgets.QGridLayout()
-        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.audioControllerLayout = QtWidgets.QHBoxLayout()
+        self.audioControllerLayout.setObjectName("audioControllerLayout")
+        self.beginTimeEdit = QtWidgets.QTimeEdit(self.page_2)
+        self.beginTimeEdit.setStyleSheet("margin-left:80px\n"
+"")
+        self.beginTimeEdit.setCurrentSection(QtWidgets.QDateTimeEdit.SecondSection)
+        self.beginTimeEdit.setObjectName("beginTimeEdit")
+        self.audioControllerLayout.addWidget(self.beginTimeEdit)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.audioControllerLayout.addItem(spacerItem4)
+        self.stopBt = QtWidgets.QPushButton(self.page_2)
+        self.stopBt.setAutoFillBackground(False)
+        self.stopBt.setStyleSheet("image: url(:/icons/Stop.png);")
+        self.stopBt.setText("")
+        self.stopBt.setDefault(False)
+        self.stopBt.setFlat(True)
+        self.stopBt.setObjectName("stopBt")
+        self.audioControllerLayout.addWidget(self.stopBt)
+        self.playBt = QtWidgets.QPushButton(self.page_2)
+        self.playBt.setAutoFillBackground(False)
+        self.playBt.setStyleSheet("image: url(:/icons/PlayPause.png);")
+        self.playBt.setText("")
+        self.playBt.setDefault(False)
+        self.playBt.setFlat(True)
+        self.playBt.setObjectName("playBt")
+        self.audioControllerLayout.addWidget(self.playBt)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.audioControllerLayout.addItem(spacerItem5)
+        self.endTimeEdit = QtWidgets.QTimeEdit(self.page_2)
+        self.endTimeEdit.setStyleSheet("margin-right: 80px")
+        self.endTimeEdit.setObjectName("endTimeEdit")
+        self.audioControllerLayout.addWidget(self.endTimeEdit)
+        self.gridLayout_6.addLayout(self.audioControllerLayout, 4, 0, 1, 1)
+        self.buttonBackLayout = QtWidgets.QHBoxLayout()
+        self.buttonBackLayout.setObjectName("buttonBackLayout")
+        self.backBt = QtWidgets.QPushButton(self.page_2)
+        self.backBt.setObjectName("backBt")
+        self.buttonBackLayout.addWidget(self.backBt)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.buttonBackLayout.addItem(spacerItem6)
+        self.gridLayout_6.addLayout(self.buttonBackLayout, 0, 0, 1, 1)
         self.slider = QtWidgets.QSlider(self.page_2)
         self.slider.setStyleSheet("QSlider::groove:horizontal {\n"
 "border: 1px solid #999999;\n"
@@ -247,104 +226,63 @@ class Ui_Mainwindow(object):
         self.slider.setPageStep(100)
         self.slider.setOrientation(QtCore.Qt.Horizontal)
         self.slider.setObjectName("slider")
-        self.gridLayout_3.addWidget(self.slider, 1, 0, 1, 1)
-        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_7.setContentsMargins(50, -1, -1, -1)
-        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.beginTimeEdit = QtWidgets.QTimeEdit(self.page_2)
-        self.beginTimeEdit.setCurrentSection(QtWidgets.QDateTimeEdit.SecondSection)
-        self.beginTimeEdit.setObjectName("beginTimeEdit")
-        self.horizontalLayout_7.addWidget(self.beginTimeEdit)
-        self.horizontalLayout_8.addLayout(self.horizontalLayout_7)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_8.addItem(spacerItem4)
-        self.stopBt = QtWidgets.QPushButton(self.page_2)
-        self.stopBt.setAutoFillBackground(False)
-        self.stopBt.setStyleSheet("image: url(:/icons/Stop.png);")
-        self.stopBt.setText("")
-        self.stopBt.setDefault(False)
-        self.stopBt.setFlat(False)
-        self.stopBt.setObjectName("stopBt")
-        self.horizontalLayout_8.addWidget(self.stopBt)
-        self.playBt = QtWidgets.QPushButton(self.page_2)
-        self.playBt.setAutoFillBackground(False)
-        self.playBt.setStyleSheet("image: url(:/icons/PlayPause.png);")
-        self.playBt.setText("")
-        self.playBt.setDefault(False)
-        self.playBt.setFlat(True)
-        self.playBt.setObjectName("playBt")
-        self.horizontalLayout_8.addWidget(self.playBt)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_8.addItem(spacerItem5)
-        self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_9.setContentsMargins(0, -1, 50, -1)
-        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        self.endTimeEdit = QtWidgets.QTimeEdit(self.page_2)
-        self.endTimeEdit.setObjectName("endTimeEdit")
-        self.horizontalLayout_9.addWidget(self.endTimeEdit)
-        self.horizontalLayout_8.addLayout(self.horizontalLayout_9)
-        self.gridLayout_3.addLayout(self.horizontalLayout_8, 0, 0, 1, 1)
-        self.gridLayout_6.addLayout(self.gridLayout_3, 4, 0, 1, 1)
-        self.horizontalLayout_20 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_20.setObjectName("horizontalLayout_20")
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_20.addItem(spacerItem6)
-        self.confirmBt = QtWidgets.QPushButton(self.page_2)
-        self.confirmBt.setStyleSheet("background-color: rgb(125, 255, 145);\n"
-"color: rgb(0, 0, 0);")
-        self.confirmBt.setObjectName("confirmBt")
-        self.horizontalLayout_20.addWidget(self.confirmBt)
-        self.removeBt = QtWidgets.QPushButton(self.page_2)
-        self.removeBt.setStyleSheet("background-color: rgb(255, 116, 116);\n"
-"color: rgb(0, 0, 0);")
-        self.removeBt.setObjectName("removeBt")
-        self.horizontalLayout_20.addWidget(self.removeBt)
+        self.gridLayout_6.addWidget(self.slider, 5, 0, 1, 1)
+        self.selectDiffLayout = QtWidgets.QHBoxLayout()
+        self.selectDiffLayout.setObjectName("selectDiffLayout")
         spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_20.addItem(spacerItem7)
-        self.horizontalLayout_20.setStretch(0, 1)
-        self.horizontalLayout_20.setStretch(1, 2)
-        self.horizontalLayout_20.setStretch(2, 2)
-        self.horizontalLayout_20.setStretch(3, 1)
-        self.gridLayout_6.addLayout(self.horizontalLayout_20, 5, 0, 1, 1)
-        self.horizontalLayout_19 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_19.setObjectName("horizontalLayout_19")
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_19.addItem(spacerItem8)
+        self.selectDiffLayout.addItem(spacerItem7)
         self.getPrevDiffBt = QtWidgets.QPushButton(self.page_2)
         self.getPrevDiffBt.setStyleSheet("background-color: rgb(255, 222, 181);\n"
 "color: rgb(0, 0, 0);")
         self.getPrevDiffBt.setObjectName("getPrevDiffBt")
-        self.horizontalLayout_19.addWidget(self.getPrevDiffBt)
+        self.selectDiffLayout.addWidget(self.getPrevDiffBt)
         self.refreshBt = QtWidgets.QPushButton(self.page_2)
         self.refreshBt.setStyleSheet("color: rgb(0, 0, 0);\n"
 "background-color: rgb(146, 202, 255);")
         self.refreshBt.setObjectName("refreshBt")
-        self.horizontalLayout_19.addWidget(self.refreshBt)
+        self.selectDiffLayout.addWidget(self.refreshBt)
         self.getNextDiffBt = QtWidgets.QPushButton(self.page_2)
         self.getNextDiffBt.setStyleSheet("background-color: rgb(255, 222, 181);\n"
 "color: rgb(0, 0, 0);")
         self.getNextDiffBt.setObjectName("getNextDiffBt")
-        self.horizontalLayout_19.addWidget(self.getNextDiffBt)
+        self.selectDiffLayout.addWidget(self.getNextDiffBt)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.selectDiffLayout.addItem(spacerItem8)
+        self.selectDiffLayout.setStretch(0, 1)
+        self.selectDiffLayout.setStretch(1, 2)
+        self.selectDiffLayout.setStretch(2, 2)
+        self.selectDiffLayout.setStretch(3, 2)
+        self.selectDiffLayout.setStretch(4, 1)
+        self.gridLayout_6.addLayout(self.selectDiffLayout, 1, 0, 1, 1)
+        self.confirmRemoveLayout = QtWidgets.QHBoxLayout()
+        self.confirmRemoveLayout.setObjectName("confirmRemoveLayout")
         spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_19.addItem(spacerItem9)
-        self.horizontalLayout_19.setStretch(0, 1)
-        self.horizontalLayout_19.setStretch(1, 2)
-        self.horizontalLayout_19.setStretch(2, 2)
-        self.horizontalLayout_19.setStretch(3, 2)
-        self.horizontalLayout_19.setStretch(4, 1)
-        self.gridLayout_6.addLayout(self.horizontalLayout_19, 1, 0, 1, 1)
-        self.horizontalLayout_17 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_17.setObjectName("horizontalLayout_17")
-        self.backBt = QtWidgets.QPushButton(self.page_2)
-        self.backBt.setObjectName("backBt")
-        self.horizontalLayout_17.addWidget(self.backBt)
+        self.confirmRemoveLayout.addItem(spacerItem9)
+        self.confirmBt = QtWidgets.QPushButton(self.page_2)
+        self.confirmBt.setStyleSheet("background-color: rgb(125, 255, 145);\n"
+"color: rgb(0, 0, 0);")
+        self.confirmBt.setObjectName("confirmBt")
+        self.confirmRemoveLayout.addWidget(self.confirmBt)
+        self.removeBt = QtWidgets.QPushButton(self.page_2)
+        self.removeBt.setStyleSheet("background-color: rgb(255, 116, 116);\n"
+"color: rgb(0, 0, 0);")
+        self.removeBt.setObjectName("removeBt")
+        self.confirmRemoveLayout.addWidget(self.removeBt)
         spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_17.addItem(spacerItem10)
-        self.gridLayout_6.addLayout(self.horizontalLayout_17, 0, 0, 1, 1)
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.confirmRemoveLayout.addItem(spacerItem10)
+        self.confirmRemoveLayout.setStretch(0, 1)
+        self.confirmRemoveLayout.setStretch(1, 2)
+        self.confirmRemoveLayout.setStretch(2, 2)
+        self.confirmRemoveLayout.setStretch(3, 1)
+        self.gridLayout_6.addLayout(self.confirmRemoveLayout, 6, 0, 1, 1)
+        self.textSpeakerLayout = QtWidgets.QHBoxLayout()
+        self.textSpeakerLayout.setContentsMargins(-1, 0, 0, -1)
+        self.textSpeakerLayout.setObjectName("textSpeakerLayout")
+        self.textAreasLayout = QtWidgets.QVBoxLayout()
+        self.textAreasLayout.setObjectName("textAreasLayout")
+        self.label_3 = QtWidgets.QLabel(self.page_2)
+        self.label_3.setObjectName("label_3")
+        self.textAreasLayout.addWidget(self.label_3)
         self.recognizedTE = QtWidgets.QPlainTextEdit(self.page_2)
         font = QtGui.QFont()
         font.setFamily("Courier New")
@@ -352,30 +290,49 @@ class Ui_Mainwindow(object):
         self.recognizedTE.setFont(font)
         self.recognizedTE.setPlainText("")
         self.recognizedTE.setObjectName("recognizedTE")
-        self.verticalLayout_3.addWidget(self.recognizedTE)
+        self.textAreasLayout.addWidget(self.recognizedTE)
         self.label_4 = QtWidgets.QLabel(self.page_2)
         self.label_4.setObjectName("label_4")
-        self.verticalLayout_3.addWidget(self.label_4)
+        self.textAreasLayout.addWidget(self.label_4)
         self.currentTE = QtWidgets.QPlainTextEdit(self.page_2)
         font = QtGui.QFont()
         font.setPointSize(8)
         self.currentTE.setFont(font)
         self.currentTE.setObjectName("currentTE")
-        self.verticalLayout_3.addWidget(self.currentTE)
-        self.gridLayout_6.addLayout(self.verticalLayout_3, 3, 0, 1, 1)
-        self.label_3 = QtWidgets.QLabel(self.page_2)
-        self.label_3.setObjectName("label_3")
-        self.gridLayout_6.addWidget(self.label_3, 2, 0, 1, 1)
-        self.gridLayout_6.setRowMinimumHeight(0, 1)
-        self.gridLayout_6.setRowMinimumHeight(1, 1)
-        self.gridLayout_6.setRowMinimumHeight(2, 2)
-        self.gridLayout_6.setRowMinimumHeight(3, 2)
-        self.gridLayout_6.setRowMinimumHeight(4, 1)
+        self.textAreasLayout.addWidget(self.currentTE)
+        self.textSpeakerLayout.addLayout(self.textAreasLayout)
+        self.speakersLayout = QtWidgets.QVBoxLayout()
+        self.speakersLayout.setContentsMargins(-1, 20, 0, -1)
+        self.speakersLayout.setObjectName("speakersLayout")
+        self.speakersList = QtWidgets.QListWidget(self.page_2)
+        self.speakersList.setMinimumSize(QtCore.QSize(100, 0))
+        self.speakersList.setObjectName("speakersList")
+        self.speakersLayout.addWidget(self.speakersList)
+        self.currentSpeaker = QtWidgets.QLabel(self.page_2)
+        self.currentSpeaker.setObjectName("currentSpeaker")
+        self.speakersLayout.addWidget(self.currentSpeaker)
+        self.addSpekaerLayout = QtWidgets.QHBoxLayout()
+        self.addSpekaerLayout.setContentsMargins(-1, 20, -1, -1)
+        self.addSpekaerLayout.setObjectName("addSpekaerLayout")
+        self.addSpeakerBt = QtWidgets.QPushButton(self.page_2)
+        self.addSpeakerBt.setObjectName("addSpeakerBt")
+        self.addSpekaerLayout.addWidget(self.addSpeakerBt)
+        self.speakerNameTE = QtWidgets.QLineEdit(self.page_2)
+        self.speakerNameTE.setObjectName("speakerNameTE")
+        self.addSpekaerLayout.addWidget(self.speakerNameTE)
+        self.speakersLayout.addLayout(self.addSpekaerLayout)
+        self.deleteSpeaker = QtWidgets.QPushButton(self.page_2)
+        self.deleteSpeaker.setObjectName("deleteSpeaker")
+        self.speakersLayout.addWidget(self.deleteSpeaker)
+        self.textSpeakerLayout.addLayout(self.speakersLayout)
+        self.textSpeakerLayout.setStretch(0, 9)
+        self.textSpeakerLayout.setStretch(1, 3)
+        self.gridLayout_6.addLayout(self.textSpeakerLayout, 2, 0, 1, 1)
         self.stackedWidget.addWidget(self.page_2)
         self.gridLayout_2.addWidget(self.stackedWidget, 0, 0, 1, 1)
         Mainwindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(Mainwindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1279, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1020, 21))
         self.menubar.setObjectName("menubar")
         Mainwindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(Mainwindow)
@@ -409,12 +366,15 @@ class Ui_Mainwindow(object):
         self.fixDiffBt.setText(_translate("Mainwindow", "Fix diff"))
         self.beginTimeEdit.setDisplayFormat(_translate("Mainwindow", "ss:zzz"))
         self.endTimeEdit.setDisplayFormat(_translate("Mainwindow", "ss:zzz"))
-        self.confirmBt.setText(_translate("Mainwindow", "Confirm"))
-        self.removeBt.setText(_translate("Mainwindow", "Remove"))
+        self.backBt.setText(_translate("Mainwindow", "back"))
         self.getPrevDiffBt.setText(_translate("Mainwindow", "Get previous diff"))
         self.refreshBt.setText(_translate("Mainwindow", "Refresh"))
         self.getNextDiffBt.setText(_translate("Mainwindow", "Get next diff"))
-        self.backBt.setText(_translate("Mainwindow", "back"))
-        self.label_4.setText(_translate("Mainwindow", "Current:"))
+        self.confirmBt.setText(_translate("Mainwindow", "Confirm"))
+        self.removeBt.setText(_translate("Mainwindow", "Remove"))
         self.label_3.setText(_translate("Mainwindow", "Recognized:"))
+        self.label_4.setText(_translate("Mainwindow", "Final version:"))
+        self.currentSpeaker.setText(_translate("Mainwindow", "Current speaker:"))
+        self.addSpeakerBt.setText(_translate("Mainwindow", "Add"))
+        self.deleteSpeaker.setText(_translate("Mainwindow", "Delete selected"))
 import resources_rc
